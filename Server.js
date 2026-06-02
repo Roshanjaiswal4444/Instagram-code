@@ -5,8 +5,10 @@ const os = require('os');
 const { execSync } = require('child_process');
 
 const PORT = 8080;
+const DASHBOARD_PASSWORD = 'admin';
 const logFilePath = path.join(__dirname, 'log.txt');
 let capturedHistory = [];
+let intruderLog = [];
 
 // ═══════════════════════════════════════════
 //  AUTO-KILL: Free port 8080 before starting
@@ -79,7 +81,7 @@ const server = http.createServer((req, res) => {
     // CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Password');
 
     if (req.method === 'OPTIONS') {
         res.writeHead(204);
@@ -92,6 +94,34 @@ const server = http.createServer((req, res) => {
         fs.readFile(filePath, (err, content) => {
             if (err) { res.writeHead(500); res.end('Error: index.html not found'); }
             else { res.writeHead(200, { 'Content-Type': 'text/html' }); res.end(content); }
+        });
+    }
+
+    // ─── Auth — dashboard login ───
+    else if (req.method === 'POST' && req.url === '/auth') {
+        let body = '';
+        req.on('data', chunk => body += chunk);
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(body);
+                if (data.password === DASHBOARD_PASSWORD) {
+                    console.log('🔓 Dashboard authenticated successfully.');
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: true }));
+                } else {
+                    console.log(`🔒 Failed dashboard login attempt: "${data.password}"`);
+                    intruderLog.push({
+                        ip: req.socket.remoteAddress || 'Unknown',
+                        attemptedPassword: data.password || '',
+                        timestamp: new Date().toISOString()
+                    });
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: false, message: 'Wrong password' }));
+                }
+            } catch (e) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, message: 'Bad request' }));
+            }
         });
     }
 
@@ -153,15 +183,37 @@ const server = http.createServer((req, res) => {
         });
     }
 
-    // ─── API — get all data ───
+    // ─── API — get all data (auth-protected) ───
     else if (req.method === 'GET' && req.url === '/api/data') {
+        const pw = req.headers['x-password'] || '';
+        if (pw !== DASHBOARD_PASSWORD) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Forbidden' }));
+        }
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(capturedHistory));
     }
 
-    // ─── API — clear all data ───
+    // ─── API — get intruder log (auth-protected) ───
+    else if (req.method === 'GET' && req.url === '/api/intruders') {
+        const pw = req.headers['x-password'] || '';
+        if (pw !== DASHBOARD_PASSWORD) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Forbidden' }));
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(intruderLog));
+    }
+
+    // ─── API — clear all data (auth-protected) ───
     else if (req.method === 'POST' && req.url === '/clear') {
+        const pw = req.headers['x-password'] || '';
+        if (pw !== DASHBOARD_PASSWORD) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Forbidden' }));
+        }
         capturedHistory = [];
+        intruderLog = [];
         try {
             fs.writeFileSync(logFilePath, '');
             console.log('🗑️  All data CLEARED.');

