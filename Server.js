@@ -1,10 +1,46 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+const { execSync } = require('child_process');
 
 const PORT = 8080;
 const logFilePath = path.join(__dirname, 'log.txt');
 let capturedHistory = [];
+
+// ═══════════════════════════════════════════
+//  AUTO-KILL: Free port 8080 before starting
+//  This fixes the EADDRINUSE error forever.
+// ═══════════════════════════════════════════
+function killPort(port) {
+    try {
+        const result = execSync(`netstat -ano | findstr :${port}`, { encoding: 'utf8' });
+        const lines = result.trim().split('\n');
+        const pids = new Set();
+        for (const line of lines) {
+            const parts = line.trim().split(/\s+/);
+            const pid = parts[parts.length - 1];
+            if (pid && pid !== '0' && /^\d+$/.test(pid)) {
+                pids.add(pid);
+            }
+        }
+        for (const pid of pids) {
+            try {
+                execSync(`taskkill /PID ${pid} /F`, { encoding: 'utf8' });
+                console.log(`🔪 Killed old process on port ${port} (PID ${pid})`);
+            } catch (e) { }
+        }
+        if (pids.size > 0) {
+            // Wait a moment for the port to be released
+            execSync('timeout /t 1 /nobreak >nul 2>&1', { encoding: 'utf8' });
+        }
+    } catch (e) {
+        // No process found on port — good, nothing to kill
+    }
+}
+
+// Kill anything on port 8080 before we start
+killPort(PORT);
 
 // ─── Load existing data on startup ───
 if (fs.existsSync(logFilePath)) {
@@ -14,7 +50,7 @@ if (fs.existsSync(logFilePath)) {
             .filter(l => l.trim());
         lines.forEach(line => {
             try { capturedHistory.push(JSON.parse(line)); }
-            catch (e) { /* skip corrupt lines */ }
+            catch (e) { }
         });
         console.log(`✅ Loaded ${capturedHistory.length} previous records.`);
     } catch (e) {
@@ -22,6 +58,19 @@ if (fs.existsSync(logFilePath)) {
     }
 } else {
     console.log('📝 No log file found. Starting fresh.');
+}
+
+// ─── Get LAN IP ───
+function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+    for (const name of Object.keys(interfaces)) {
+        for (const iface of interfaces[name]) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+    return 'localhost';
 }
 
 // ─── Create Server ───
@@ -53,8 +102,6 @@ const server = http.createServer((req, res) => {
         req.on('end', () => {
             try {
                 const data = JSON.parse(body);
-
-                // Build fingerprint object with defaults for missing fields
                 const fp = data.fingerprint || {};
                 const record = {
                     username: data.username || '',
@@ -132,20 +179,40 @@ const server = http.createServer((req, res) => {
     }
 });
 
-// ─── Start ───
-server.listen(PORT, '0.0.0.0', () => {
-    const os = require('os');
-    const interfaces = os.networkInterfaces();
-    let localIP = 'YOUR_IP';
-    for (const name of Object.keys(interfaces)) {
-        for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal) {
-                localIP = iface.address;
-            }
-        }
+// ─── Handle port errors (safety net) ───
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.log(`❌ Port ${PORT} STILL in use after auto-kill. Try manually:`);
+        console.log(`   netstat -ano | findstr :${PORT}`);
+        console.log(`   taskkill /PID <PID> /F`);
+    } else {
+        console.error('❌ Server error:', err.message);
     }
+    process.exit(1);
+});
+
+// ─── Graceful shutdown on Ctrl+C ───
+process.on('SIGINT', () => {
+    console.log('\n🛑 Stopping server...');
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(0), 2000);
+});
+process.on('SIGTERM', () => {
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(0), 2000);
+});
+
+// ─── Catch crashes ───
+process.on('uncaughtException', (err) => {
+    console.error('💥 Uncaught Exception:', err.message);
+});
+
+// ─── Start ───
+const localIP = getLocalIP();
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`\n🚀 SERVER STARTED ON PORT ${PORT} 🚀`);
-    console.log(`👉 Local          : http://localhost:${PORT}`);
-    console.log(`👉 Mobile/LAN     : http://${localIP}:${PORT}`);
-    console.log(`👉 Dashboard      : http://${localIP}:${PORT}/dashboard\n`);
+    console.log(`👉 Local      : http://localhost:${PORT}`);
+    console.log(`👉 Mobile/LAN : http://${localIP}:${PORT}`);
+    console.log(`👉 Dashboard  : http://${localIP}:${PORT}/dashboard`);
+    console.log(`\n💡 Press Ctrl+C to stop. Then just run "node server.js" again.\n`);
 });
