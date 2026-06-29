@@ -1,0 +1,13 @@
+{
+  "name": "phishdemo",
+  "version": "1.0.0",
+  "description": "PhishDemo credential capture server",
+  "main": "Server.js",
+  "scripts": {
+    "start": "node Server.js",
+    "dev": "node Server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
